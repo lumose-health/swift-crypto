@@ -92,6 +92,7 @@ let package = Package(
         // Kept for backward compatibility
         .library(name: "_CryptoExtras", targets: ["_CryptoExtras"]),
         .library(name: "CryptoExtras", targets: ["CryptoExtras"]),
+        .library(name: "CryptoBoringWrapper", targets: ["CryptoBoringWrapper"]),
         /* This target is used only for symbol mangling. It's added and removed automatically because it emits build warnings. MANGLE_START
             .library(name: "CCryptoBoringSSL", type: .static, targets: ["CCryptoBoringSSL"]),
             MANGLE_END */

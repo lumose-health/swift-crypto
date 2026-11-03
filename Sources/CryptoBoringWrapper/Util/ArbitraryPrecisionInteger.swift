@@ -24,9 +24,8 @@ import Foundation
 
 /// A wrapper around the OpenSSL BIGNUM object that is appropriately lifetime managed,
 /// and that provides better Swift types for this object.
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
-package struct ArbitraryPrecisionInteger: @unchecked Sendable {
+public struct ArbitraryPrecisionInteger: @unchecked Sendable {
     private var _backing: BackingStorage
 
     @usableFromInline
@@ -43,8 +42,7 @@ package struct ArbitraryPrecisionInteger: @unchecked Sendable {
         self._backing = try BackingStorage(copying: original._backing)
     }
 
-    @usableFromInline
-    package init(integerLiteral value: Int64) {
+    public init(integerLiteral value: Int64) {
         self._backing = BackingStorage(value)
     }
 }
@@ -99,8 +97,7 @@ extension ArbitraryPrecisionInteger {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension ArbitraryPrecisionInteger {
-    @usableFromInline
-    package init<Bytes: ContiguousBytes>(bytes: Bytes) throws {
+    public init<Bytes: ContiguousBytes>(bytes: Bytes) throws {
         self._backing = try BackingStorage(bytes: bytes)
     }
 
@@ -265,7 +262,7 @@ extension ArbitraryPrecisionInteger {
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension ArbitraryPrecisionInteger: Equatable {
     @inlinable
-    package static func == (lhs: ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) -> Bool {
+    public static func == (lhs: ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) -> Bool {
         self._compare(lhs: lhs, rhs: rhs) == 0
     }
 }
@@ -275,22 +272,22 @@ extension ArbitraryPrecisionInteger: Equatable {
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension ArbitraryPrecisionInteger: Comparable {
     @inlinable
-    package static func < (lhs: ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) -> Bool {
+    public static func < (lhs: ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) -> Bool {
         self._compare(lhs: lhs, rhs: rhs) < 0
     }
 
     @inlinable
-    package static func <= (lhs: ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) -> Bool {
+    public static func <= (lhs: ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) -> Bool {
         self._compare(lhs: lhs, rhs: rhs) <= 0
     }
 
     @inlinable
-    package static func > (lhs: ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) -> Bool {
+    public static func > (lhs: ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) -> Bool {
         self._compare(lhs: lhs, rhs: rhs) > 0
     }
 
     @inlinable
-    package static func >= (lhs: ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) -> Bool {
+    public static func >= (lhs: ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) -> Bool {
         self._compare(lhs: lhs, rhs: rhs) >= 0
     }
 }
@@ -305,12 +302,11 @@ extension ArbitraryPrecisionInteger: ExpressibleByIntegerLiteral {}
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension ArbitraryPrecisionInteger: AdditiveArithmetic {
     @inlinable
-    package static var zero: ArbitraryPrecisionInteger {
+    public static var zero: ArbitraryPrecisionInteger {
         0
     }
 
-    @usableFromInline
-    package static func + (
+    public static func + (
         lhs: ArbitraryPrecisionInteger,
         rhs: ArbitraryPrecisionInteger
     )
@@ -330,8 +326,7 @@ extension ArbitraryPrecisionInteger: AdditiveArithmetic {
         return result
     }
 
-    @usableFromInline
-    package static func += (lhs: inout ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) {
+    public static func += (lhs: inout ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) {
         let rc = lhs.withUnsafeMutableBignumPointer { lhsPtr in
             rhs.withUnsafeBignumPointer { rhsPtr in
                 CCryptoBoringSSL_BN_add(lhsPtr, lhsPtr, rhsPtr)
@@ -340,8 +335,7 @@ extension ArbitraryPrecisionInteger: AdditiveArithmetic {
         precondition(rc == 1, "Unable to allocate memory for new ArbitraryPrecisionInteger")
     }
 
-    @usableFromInline
-    package static func - (
+    public static func - (
         lhs: ArbitraryPrecisionInteger,
         rhs: ArbitraryPrecisionInteger
     )
@@ -361,8 +355,7 @@ extension ArbitraryPrecisionInteger: AdditiveArithmetic {
         return result
     }
 
-    @usableFromInline
-    package static func -= (lhs: inout ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) {
+    public static func -= (lhs: inout ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) {
         let rc = lhs.withUnsafeMutableBignumPointer { lhsPtr in
             rhs.withUnsafeBignumPointer { rhsPtr in
                 CCryptoBoringSSL_BN_sub(lhsPtr, lhsPtr, rhsPtr)
@@ -376,11 +369,9 @@ extension ArbitraryPrecisionInteger: AdditiveArithmetic {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension ArbitraryPrecisionInteger: Numeric {
-    @usableFromInline
-    package typealias Magnitude = Self
+    public typealias Magnitude = Self
 
-    @usableFromInline
-    package var magnitude: Magnitude {
+    public var magnitude: Magnitude {
         if self._positive {
             return self
         }
@@ -394,8 +385,7 @@ extension ArbitraryPrecisionInteger: Numeric {
         return copy
     }
 
-    @usableFromInline
-    package static func * (
+    public static func * (
         lhs: ArbitraryPrecisionInteger,
         rhs: ArbitraryPrecisionInteger
     )
@@ -417,8 +407,7 @@ extension ArbitraryPrecisionInteger: Numeric {
         return result
     }
 
-    @usableFromInline
-    package static func *= (lhs: inout ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) {
+    public static func *= (lhs: inout ArbitraryPrecisionInteger, rhs: ArbitraryPrecisionInteger) {
         let rc = lhs.withUnsafeMutableBignumPointer { lhsPtr in
             rhs.withUnsafeBignumPointer { rhsPtr in
                 ArbitraryPrecisionInteger.withUnsafeBN_CTX { bnCtx in
@@ -430,7 +419,7 @@ extension ArbitraryPrecisionInteger: Numeric {
     }
 
     @inlinable
-    package init?<T: BinaryInteger>(exactly integer: T) {
+    public init?<T: BinaryInteger>(exactly integer: T) {
         fatalError("Not currently implemented")
     }
 }
@@ -439,8 +428,7 @@ extension ArbitraryPrecisionInteger: Numeric {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension ArbitraryPrecisionInteger {
-    @usableFromInline
-    package func modulo(
+    public func modulo(
         _ mod: ArbitraryPrecisionInteger,
         nonNegative: Bool = false
     ) throws
@@ -492,8 +480,7 @@ extension ArbitraryPrecisionInteger {
         try ArbitraryPrecisionInteger(lhs).inverse(modulo: mod)
     }
 
-    @usableFromInline
-    package func add(
+    public func add(
         _ rhs: ArbitraryPrecisionInteger,
         modulo modulus: ArbitraryPrecisionInteger? = nil
     ) throws -> ArbitraryPrecisionInteger {
@@ -516,8 +503,7 @@ extension ArbitraryPrecisionInteger {
         return result
     }
 
-    @usableFromInline
-    package func sub(
+    public func sub(
         _ rhs: ArbitraryPrecisionInteger,
         modulo modulus: ArbitraryPrecisionInteger? = nil
     ) throws -> ArbitraryPrecisionInteger {
@@ -540,8 +526,7 @@ extension ArbitraryPrecisionInteger {
         return result
     }
 
-    @usableFromInline
-    package func mul(
+    public func mul(
         _ rhs: ArbitraryPrecisionInteger,
         modulo modulus: ArbitraryPrecisionInteger? = nil
     ) throws -> ArbitraryPrecisionInteger {
@@ -569,8 +554,7 @@ extension ArbitraryPrecisionInteger {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension ArbitraryPrecisionInteger: SignedNumeric {
-    @usableFromInline
-    package mutating func negate() {
+    public mutating func negate() {
         let signBit: CInt = self._positive ? 1 : 0
 
         self.withUnsafeMutableBignumPointer {
@@ -721,8 +705,7 @@ extension Data {
         assert(written == byteCount)
     }
 
-    @usableFromInline
-    package init(bytesOf integer: ArbitraryPrecisionInteger, paddedToSize paddingSize: Int) throws {
+    public init(bytesOf integer: ArbitraryPrecisionInteger, paddedToSize paddingSize: Int) throws {
         self.init(capacity: paddingSize)
         try self.append(bytesOf: integer, paddedToSize: paddingSize)
     }
@@ -732,8 +715,7 @@ extension Data {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension ArbitraryPrecisionInteger: CustomDebugStringConvertible {
-    @usableFromInline
-    package var debugDescription: String {
+    public var debugDescription: String {
         guard let bio = CCryptoBoringSSL_BIO_new(CCryptoBoringSSL_BIO_s_mem()) else {
             return "ArbitraryPrecisionInteger: (error generating representation)"
         }

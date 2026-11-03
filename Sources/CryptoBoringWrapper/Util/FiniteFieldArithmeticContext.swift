@@ -32,9 +32,8 @@ import Foundation
 ///
 /// Annoyingly, because of the way we have implemented ArbitraryPrecisionInteger, we can't actually use these temporary bignums
 /// ourselves.
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
-package class FiniteFieldArithmeticContext: @unchecked Sendable {
+public class FiniteFieldArithmeticContext: @unchecked Sendable {
     private let fieldSize: ArbitraryPrecisionInteger
     package let bnCtx: OpaquePointer
 

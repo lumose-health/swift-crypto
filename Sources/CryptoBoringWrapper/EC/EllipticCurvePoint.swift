@@ -23,9 +23,8 @@ import struct Foundation.Data
 #endif
 
 /// A wrapper around BoringSSL's EC_POINT with some lifetime management and value semantics.
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
-package struct EllipticCurvePoint: @unchecked Sendable {
+public struct EllipticCurvePoint: @unchecked Sendable {
     @usableFromInline
     var backing: Backing
 
@@ -44,8 +43,7 @@ package struct EllipticCurvePoint: @unchecked Sendable {
         self.backing = try .init(_generatorOf: groupPtr)
     }
 
-    @usableFromInline
-    package init(
+    public init(
         multiplying scalar: ArbitraryPrecisionInteger,
         on group: BoringSSLEllipticCurveGroup,
         context: FiniteFieldArithmeticContext? = nil
@@ -63,8 +61,7 @@ package struct EllipticCurvePoint: @unchecked Sendable {
         try self.backing.multiply(by: rhs, on: group, context: context)
     }
 
-    @usableFromInline
-    package init(
+    public init(
         multiplying lhs: EllipticCurvePoint,
         by rhs: ArbitraryPrecisionInteger,
         on group: BoringSSLEllipticCurveGroup,
@@ -120,8 +117,7 @@ package struct EllipticCurvePoint: @unchecked Sendable {
         try self.backing.add(rhs, on: group, context: context)
     }
 
-    @usableFromInline
-    package init(
+    public init(
         adding lhs: EllipticCurvePoint,
         _ rhs: EllipticCurvePoint,
         on group: BoringSSLEllipticCurveGroup,
@@ -194,8 +190,7 @@ package struct EllipticCurvePoint: @unchecked Sendable {
         try self.backing.invert(on: group, context: context)
     }
 
-    @usableFromInline
-    package init(
+    public init(
         inverting point: EllipticCurvePoint,
         on group: BoringSSLEllipticCurveGroup,
         context: FiniteFieldArithmeticContext? = nil
@@ -264,8 +259,7 @@ package struct EllipticCurvePoint: @unchecked Sendable {
         try self.add(rhs.inverting(on: group), on: group, context: context)
     }
 
-    @usableFromInline
-    package init(
+    public init(
         subtracting rhs: consuming EllipticCurvePoint,
         from lhs: consuming EllipticCurvePoint,
         on group: BoringSSLEllipticCurveGroup,
@@ -338,8 +332,7 @@ package struct EllipticCurvePoint: @unchecked Sendable {
         self.backing = try .init(hashing: msg, to: group, domainSeparationTag: domainSeparationTag)
     }
 
-    @usableFromInline
-    package func isEqual(
+    public func isEqual(
         to rhs: EllipticCurvePoint,
         on group: BoringSSLEllipticCurveGroup,
         context: FiniteFieldArithmeticContext? = nil
@@ -347,8 +340,7 @@ package struct EllipticCurvePoint: @unchecked Sendable {
         self.backing.isEqual(to: rhs, on: group, context: context)
     }
 
-    @usableFromInline
-    package init<Bytes: ContiguousBytes>(
+    public init<Bytes: ContiguousBytes>(
         x962Representation bytes: Bytes,
         on group: BoringSSLEllipticCurveGroup,
         context: FiniteFieldArithmeticContext? = nil
@@ -356,8 +348,7 @@ package struct EllipticCurvePoint: @unchecked Sendable {
         self.backing = try .init(x962Representation: bytes, on: group, context: context)
     }
 
-    @usableFromInline
-    package func x962Representation(
+    public func x962Representation(
         compressed: Bool,
         on group: BoringSSLEllipticCurveGroup,
         context: FiniteFieldArithmeticContext? = nil

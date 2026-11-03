@@ -15,17 +15,15 @@
 
 /// A wrapper around BoringSSL's EC_GROUP object that handles reference counting and
 /// liveness.
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
-package final class BoringSSLEllipticCurveGroup: @unchecked Sendable {
+public final class BoringSSLEllipticCurveGroup: @unchecked Sendable {
     @usableFromInline var _group: OpaquePointer
 
-    @usableFromInline package let order: ArbitraryPrecisionInteger
+    public let order: ArbitraryPrecisionInteger
 
-    @usableFromInline package let generator: EllipticCurvePoint
+    public let generator: EllipticCurvePoint
 
-    @usableFromInline
-    package init(_ curve: CurveName) throws {
+    public init(_ curve: CurveName) throws {
         guard let group = CCryptoBoringSSL_EC_GROUP_new_by_curve_name(curve.baseNID) else {
             throw CryptoBoringWrapperError.internalBoringSSLError()
         }
@@ -104,9 +102,8 @@ extension BoringSSLEllipticCurveGroup {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension BoringSSLEllipticCurveGroup {
-    @usableFromInline
     @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
-    package enum CurveName {
+    public enum CurveName {
         case p256
         case p384
         case p521
